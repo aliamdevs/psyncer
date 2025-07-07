@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import sys
+from InquirerPy import inquirer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -11,13 +12,49 @@ try:
     with open('settings.json') as f:
         config = json.load(f)
 except:
-    print("❌ Settigns Not Declared Correctly. ")
-    print("🔗 Check https://github.com/aliamdevs/psyncer")   
-    sys.exit(1)
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print ("\nHello & Welcome To Psyncer !")
+    print ("This is A pilot CLI project to sync documents between devices connected to PSYCHO-SYNC\n")
+
+    choice = "Yes"
+    choice = inquirer.select(
+        message="Are You Using The PSYCHO-SYNC's IP :",
+        choices=["Yes", "No"],
+    ).execute()
+    tmpIP = "https://40.0.0.4/"
+    if choice == "No" :
+        tmpIP = input("Enter Your Host IP : ")
+
+    choice = inquirer.select(
+        message="Use `C: → Psyncer` : ",
+        choices=["Yes", "No"],
+    ).execute()
+    tmpDIR = "C:\\Psyncer"
+    if choice == "No" :
+        tmpDIR = input("Enter The Psyncer Directory : ")
+
+    if not os.path.isdir(tmpDIR):
+        os.makedirs(tmpDIR)
+
+    data = {
+        "dir": tmpDIR,
+        "host": tmpIP
+    }
+
+    with open("settings.json", 'w') as json_file:
+        json.dump(data, json_file, indent=2)
+    
+    print("Everything Done !")
+    print(f"Now Files in ({tmpDIR}) Are Sync with PSYCHO-SYNC Device & Devices Connected To It .")
+
+    with open('settings.json') as f:
+        config = json.load(f)
+
+    time.sleep(7)
+
     
 path = config['dir']
 api_url = config['host']
-delay = config['delay']
 
 # === Global Variables ===
 flg = True
@@ -45,7 +82,6 @@ class WatchHandler(FileSystemEventHandler):
                 print(f"Filename Changed → {event.src_path.replace(path, '.')} → {event.dest_path.replace(path, '.')}")
 
 # === Functions ===
-
 def clr():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -78,7 +114,7 @@ if __name__ == "__main__":
                 print("🔗 Psyncer Needs To Connect To PSYCHO-SYNC")
                 print("🔗 More Information Check https://github.com/aliamdevs/psyncer")
                 flg = False
-            time.sleep(delay)
+            time.sleep(3)
     except KeyboardInterrupt:
         print("❌ Stopping Observer & Exit ...")
         observer.stop()
