@@ -21,7 +21,7 @@ except:
         message="Are You Using The PSYCHO-SYNC's IP :",
         choices=["Yes", "No"],
     ).execute()
-    tmpIP = "https://40.0.0.4/"
+    tmpIP = "https://44.0.0.4/"
     if choice == "No" :
         tmpIP = input("Enter Your Host IP : ")
 
