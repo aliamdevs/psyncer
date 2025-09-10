@@ -1,3 +1,4 @@
 # Psyncer
 Not Completed .
-(2025 , 20 September -> Resume)
+
+(2026 , 20 Feb -> Resume)
